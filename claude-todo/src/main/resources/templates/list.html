@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .todo-item {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .todo-item.completed {
+            background-color: #e8f5e8;
+        }
+        .todo-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .todo-description {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .todo-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .checkbox {
+            margin-right: 10px;
+        }
+        .empty-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo 목록</h1>
+
+    <div>
+        <a href="/todos/create" class="btn">새 Todo 추가</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(todos)}" class="empty-message">
+        등록된 Todo가 없습니다.
+    </div>
+
+    <div th:each="todo : ${todos}"
+         th:class="${todo.isDone} ? 'todo-item completed' : 'todo-item'">
+
+        <div class="todo-title" th:text="${todo.title}">제목</div>
+
+        <div class="todo-description"
+             th:if="${todo.description != null and !#strings.isEmpty(todo.description)}"
+             th:text="${todo.description}">설명</div>
+
+        <div class="todo-actions">
+            <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" style="display: inline;">
+                <input type="checkbox"
+                       th:checked="${todo.isDone}"
+                       onchange="this.form.submit();"
+                       class="checkbox">
+                <span th:text="${todo.isDone} ? '완료됨' : '미완료'">상태</span>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
