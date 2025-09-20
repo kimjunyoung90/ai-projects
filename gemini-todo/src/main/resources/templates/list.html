@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <p>
+        <a href="/todos/new">Create a new Todo</a>
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Done</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th style="width: 10%;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="todo : ${todos}" th:class="${todo.isDone} ? 'completed' : ''">
+                <td>
+                    <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" style="margin: 0;">
+                        <input type="checkbox" th:checked="${todo.isDone}" onchange="this.form.submit()">
+                    </form>
+                </td>
+                <td th:text="${todo.title}">Title</td>
+                <td th:text="${todo.description}">Description</td>
+                <td>
+                    <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post" style="margin: 0;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
