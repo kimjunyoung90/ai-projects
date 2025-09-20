@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #cccccc; padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .actions { display: flex; align-items: center; gap: 8px; }
+    </style>
+</head>
+<body>
+<h1>Todo List</h1>
+<div class="actions">
+    <a th:href="@{/todos/create}">새 투두 등록</a>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>완료</th>
+        <th>제목</th>
+        <th>설명</th>
+        <th>상태</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(todos)}">
+        <td colspan="4">등록된 투두가 없습니다.</td>
+    </tr>
+    <tr th:each="todo : ${todos}">
+        <td>
+            <form th:action="@{|/todos/${todo.id}/status|}" method="post">
+                <input type="checkbox"
+                       name="isDone"
+                       value="true"
+                       th:checked="${todo.done}"
+                       onchange="this.form.submit()"/>
+                <noscript>
+                    <button type="submit">상태 변경</button>
+                </noscript>
+            </form>
+        </td>
+        <td th:text="${todo.title}">제목</td>
+        <td th:text="${#strings.isEmpty(todo.description) ? '-' : todo.description}">설명</td>
+        <td th:text="${todo.done} ? '완료' : '진행 중'">상태</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

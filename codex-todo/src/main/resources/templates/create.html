@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo Create</title>
+    <style>
+        form { max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
+        label { font-weight: bold; }
+        input[type="text"], textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        textarea { min-height: 120px; }
+        .actions { display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+<h1>새 투두 등록</h1>
+<form th:action="@{/todos}" th:object="${todoCreateRequest}" method="post">
+    <div>
+        <label for="title">제목</label>
+        <input id="title" type="text" th:field="*{title}" placeholder="제목을 입력하세요" required>
+        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+    </div>
+    <div>
+        <label for="description">설명</label>
+        <textarea id="description" th:field="*{description}" placeholder="설명을 입력하세요"></textarea>
+    </div>
+    <div class="actions">
+        <button type="submit">등록</button>
+        <a th:href="@{/todos}">목록으로</a>
+    </div>
+</form>
+</body>
+</html>
